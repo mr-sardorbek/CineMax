@@ -1,0 +1,7 @@
+export {default as Home} from "./home.jsx"
+export {default as NotFound} from "./notFound.jsx"
+export {default as Movies} from "./movies.jsx"
+export {default as Search} from "./search.jsx"
+export {default as Profile} from "./profile.jsx"
+export {default as TVshows} from "./TVshows.jsx"
+export {default as Trending} from "./trending.jsx"
