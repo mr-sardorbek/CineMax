@@ -10,7 +10,7 @@ const Home = () => {
   const [movies, setMovies] = useState([])
   const [popularMovies, setPopularMovies] = useState([])
   const [topRatedMovies, setTopRatedMovies] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const featuredMovie = popularMovies[13]
 
@@ -21,7 +21,7 @@ const Home = () => {
          const popularData = await getPopularMovies()
          const topRatedData = await getTopRatedMovies()
 
-console.log(topRatedData)
+
          setMovies(data.results)
          setPopularMovies(popularData.results)
          setTopRatedMovies(topRatedData.results)
@@ -41,7 +41,6 @@ console.log(topRatedData)
   loadMovies()
   },[])
   
-console.log("POPULAR STATE:", popularMovies)
   
   return (
     <main>
