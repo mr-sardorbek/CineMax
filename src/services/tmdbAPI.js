@@ -70,7 +70,17 @@ const searchMulti = async (query) => {
     return data
 }
 
+const getMovieDetails = async (id) => {
+    const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`)
+    const data = await response.json()
+    return data
+}
 
+const getMovieVideos = async (id) => {
+    const response = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}`)
+    const data = await response.json()
+    return data
+}
 export  {
     IMAGE_BASE_URL,
     getTrendingMovies,
@@ -83,5 +93,7 @@ export  {
     getAiringToday,
     getOnTheAir,
     getTrendingTVShows,
-    searchMulti
+    searchMulti,
+    getMovieDetails,
+    getMovieVideos
 }

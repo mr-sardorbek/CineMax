@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import { Home, Movies, NotFound, Profile, Search, Trending, TVshows } from './pages'
+import { Home, MovieDetails, Movies, NotFound, Profile, Search, Trending, TVshows } from './pages'
 import MainLayout from './layouts/mainLayouts'
 
 
@@ -13,6 +13,7 @@ const App = () => {
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/tv-shows' element={<TVshows/>}/>
       <Route path='/trending' element={<Trending/>}/>
+      <Route path='/movie/:id' element={<MovieDetails/>}/>
       <Route path='*' element={<NotFound/>}/>
     </Routes>
     </MainLayout>

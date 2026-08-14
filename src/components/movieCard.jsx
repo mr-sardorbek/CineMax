@@ -1,7 +1,9 @@
 import { Play, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const MovieCard = ({title, rating, year, image}) => {
+const MovieCard = ({id, title, rating, year, image}) => {
   return (
+    <Link to={`/movie/${id}`}>
     <article className="group overflow-hidden rounded-xl bg-gray-900">
       <div className="relative aspect-[2/3] overflow-hidden">
         <img src={image} alt={title} 
@@ -26,6 +28,7 @@ const MovieCard = ({title, rating, year, image}) => {
         </div>
       </div>
     </article>
+    </Link>
   );
 };
 

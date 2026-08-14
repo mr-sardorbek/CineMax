@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
    <nav className="fixed top-0 left-0 z-50 w-full bg-transparent  backdrop-blur-sm">
-    <div className="mx-auto  max-w-7xl px-8">
+    <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex items-center justify-between py-0">
             <div>
         <Link to="/">
@@ -42,7 +42,7 @@ const Navbar = () => {
         </button>
         </div>
         {isMenuOpen && (
-            <div className="flex flex-col gap-4 pb-4 md:hidden">
+            <div className="flex flex-col gap-5 rounded-b-2xl bg-black/90 px-4 pb-6 pt-4 backdrop-blur-md md:hidden">
                <NavLink end to="/" className={navLinkClass}
                onClick={closeMenu}>Home</NavLink>
         <NavLink to="/movies" className={navLinkClass}
@@ -51,7 +51,24 @@ const Navbar = () => {
         onClick={closeMenu}>TV-Shows</NavLink>
         <NavLink to="/trending" className={navLinkClass}
         onClick={closeMenu}>Trending</NavLink>
+        <Link
+  to="/search"
+  onClick={closeMenu}
+  className="flex items-center gap-3 text-gray-300 transition-colors hover:text-purple-400"
+>
+  <Search size={20} />
+  Search
+</Link>
+        <Link
+  to="/profile"
+  onClick={closeMenu}
+  className="flex items-center gap-3 text-gray-300 transition-colors hover:text-purple-400"
+>
+  <User size={20} />
+  Profile
+</Link>
             </div>
+
         )}
     </div>
    </nav>

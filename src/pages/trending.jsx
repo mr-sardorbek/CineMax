@@ -53,6 +53,7 @@ const Trending = () => {
           {trendingMovies.map((movie) => (
             <MovieCard
              key={movie.id}
+             id={movie.id}
             title={movie.title}
             rating={movie.vote_average}
             year={movie.release_date?.slice(0,4)}
@@ -70,6 +71,7 @@ const Trending = () => {
           {trendingTVShows.map((show) => (
             <MovieCard
              key={show.id}
+             id={show.id}
             title={show.name}
             rating={show.vote_average}
             year={show.first_air_date?.slice(0, 4)}

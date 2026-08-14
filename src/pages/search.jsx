@@ -51,6 +51,7 @@ const Search = () => {
               {searchResults.map((item) => (
                 <MovieCard
                   key={item.id}
+                  id={item.id}
                   title={item.media_type === "movie" ? item.title : item.name}
                   rating={item.vote_average}
                   year={

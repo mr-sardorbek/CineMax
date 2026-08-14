@@ -62,6 +62,7 @@ const Home = () => {
           {movies.map((movie) => (
             <MovieCard 
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             rating={movie.vote_average}
             year={movie.release_date?.slice(0,4)}
@@ -82,6 +83,7 @@ const Home = () => {
           {popularMovies.map((movie) => (
             <MovieCard 
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             rating={movie.vote_average}
             year={movie.release_date?.slice(0,4)}
@@ -101,6 +103,7 @@ const Home = () => {
           {topRatedMovies.map((movie) => (
             <MovieCard 
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             rating={movie.vote_average}
             year={movie.release_date?.slice(0,4)}

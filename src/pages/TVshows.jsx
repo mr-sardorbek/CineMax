@@ -58,6 +58,7 @@ const TVshows = () => {
           {popularTVShows.map((show) => (
             <MovieCard
              key={show.id}
+             id={show.id}
             title={show.name}
             rating={show.vote_average}
             year={show.first_air_date?.slice(0, 4)}
@@ -75,6 +76,7 @@ const TVshows = () => {
           {topRatedTVShows.map((show) => (
             <MovieCard
              key={show.id}
+             id={show.id}
             title={show.name}
             rating={show.vote_average}
             year={show.first_air_date?.slice(0, 4)}
@@ -91,6 +93,7 @@ const TVshows = () => {
           {airingToday.map((show) => (
             <MovieCard
              key={show.id}
+             id={show.id}
             title={show.name}
             rating={show.vote_average}
             year={show.first_air_date?.slice(0, 4)}
@@ -107,6 +110,7 @@ const TVshows = () => {
           {onTheAir.map((show) => (
             <MovieCard
              key={show.id}
+             id={show.id}
             title={show.name}
             rating={show.vote_average}
             year={show.first_air_date?.slice(0, 4)}
