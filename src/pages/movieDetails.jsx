@@ -1,5 +1,7 @@
-import { getMovieDetails, getMovieVideos, IMAGE_BASE_URL } from "@/services/tmdbAPI"
-import { Star } from "lucide-react"
+import { MovieCard } from "@/components"
+import { Button } from "@/components/ui/button"
+import { getMovieCredits, getMovieDetails, getMovieVideos, getSimilarMovies, IMAGE_BASE_URL } from "@/services/tmdbAPI"
+import { Star, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { toast } from "sonner"
@@ -8,6 +10,9 @@ import { toast } from "sonner"
 const MovieDetails = () => {
     const [movie, setMovie] = useState(null)
     const [trailer, setTrailer] = useState(null)
+    const [credits, setCredits] = useState(null)
+    const [similarMovies, setSimilarMovies] = useState([])
+    const [isTrailerOpen, setIsTrailerOpen] = useState(false)
 
     const {id} = useParams()
     
@@ -66,6 +71,46 @@ const MovieDetails = () => {
           trailerMovie()
     },[id])
 
+
+    useEffect(() => {
+          const loadCredits = async () => {
+            try {
+              const movieCredits = await getMovieCredits(id)
+
+              setCredits(movieCredits)
+              console.log(movieCredits)
+            } catch (error) {
+                 console.log(error);
+                toast.error("Failed to load movies", {
+          description: "Please check your internet connection and try again!",
+          className: "border-red-500/30 bg-red-950 text-white",
+          position: "top-center",
+        })
+            }
+          }
+          loadCredits()
+    },[id])
+
+
+    useEffect(() => {
+  const loadSimilarMovies = async () => {
+    try {
+      const similarMoviesData = await getSimilarMovies(id)
+
+      setSimilarMovies(similarMoviesData.results)
+    } catch (error) {
+      console.log(error);
+                toast.error("Failed to load movies", {
+          description: "Please check your internet connection and try again!",
+          className: "border-red-500/30 bg-red-950 text-white",
+          position: "top-center",
+        })
+    }
+  }
+
+  loadSimilarMovies()
+}, [id])
+
     if (!movie) {
   return <div className="loading">Loading movie details...</div>;
 }
@@ -113,13 +158,76 @@ const MovieDetails = () => {
                   </div>
 
                   <div className="mt-8">
-                    <button className="rounded-lg bg-purple-600 px-6 py-3 font-medium text-white transition-colors hover:bg-purple-700"
-                    >Watch Trailer</button>
+                    <Button className="bg-purple-600 px-6 py-5 cursor-pointer font-medium text-white hover:bg-purple-700"
+                    onClick={() => setIsTrailerOpen(true)}>Watch Trailer</Button>
                   </div>
                 </div>
             </div>
         </div>
       </section>
+
+      {isTrailerOpen && trailer && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-5">
+          <div className="relative w-full max-w-4xl">
+            <div className="aspect-video overflow-hidden rounded-xl">
+               <iframe 
+               className="h-full w-full"
+               src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1`}
+               title={`${movie.title} Trailer`}
+               allow="autoplay; encrypted-media"
+               allowFullScreen/>
+            </div>
+
+             <Button className="absolute -right-3 -top-9 flex h-8 w-8 items-center justify-center rounded-full text-xl
+             cursor-pointer text-black hover:bg-gray-200 bg-white"
+             onClick={() => setIsTrailerOpen(false)}  variant="ghost" size="icon">
+              <X size={20}/>
+             </Button>
+          </div>
+
+        </div>
+      )}
+
+      <section className="mx-auto max-w-7xl px-5 py-12 md:px-8">
+        <h2 className="mb-6 text-2xl font-bold text-black">
+          Cast
+        </h2>
+
+        <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          {credits?.cast?.slice(0,6).map((actor) => (
+            <div key={actor.id}>
+                 <img src={actor.profile_path ? `${IMAGE_BASE_URL}${actor.profile_path}` : "/placeholder-person.png"} alt={actor.name} 
+                 className="aspect-[2/3] w-full rounded-3xl object-cover"/>
+                 <h3 className="mt-3 font-semibold text-black">
+                  {actor.name}
+                 </h3>
+                 <p className="mt-1 text-sm text-gray-500">
+                  {actor.character}
+                 </p>
+            </div>
+          ))}
+
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
+  <h2 className="mb-6 text-2xl font-bold text-black">
+    Similar Movies
+  </h2>
+
+  <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
+    {similarMovies.slice(0, 10).map((movie) => (
+      <MovieCard
+        key={movie.id}
+        id={movie.id}
+        title={movie.title}
+        rating={movie.vote_average}
+        year={movie.release_date?.slice(0, 4)}
+        image={`${IMAGE_BASE_URL}${movie.poster_path}`}
+      />
+    ))}
+  </div>
+</section>
     </main>
   )
 }

@@ -9,7 +9,6 @@ const Search = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const handleSearch = async () => {
     if (!query.trim()) return;
 
