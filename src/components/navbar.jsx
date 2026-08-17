@@ -2,15 +2,22 @@ import { Link, NavLink } from "react-router-dom";
 import { MovieLogo } from "../assets";
 import { Menu, Search, User, X } from "lucide-react";
 import { useState } from "react";
-import { ThemeToggle } from ".";
+import { LanguageSwitcher, ThemeToggle } from ".";
+import useLanguage from "@/hooks/useLanguage";
 
 const navLinkClass = ({ isActive }) =>
   isActive
     ? "text-purple-500 transition-colors duration-200"
-    : "text-gray-400 transition-colors duration-200 hover:text-white";
+    : "text-foreground transition-colors duration-200 hover:text-purple-500";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+ const languageData = useLanguage();
+
+console.log("LANGUAGE DATA:", languageData);
+
+const { t } = languageData;
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -27,31 +34,32 @@ const Navbar = () => {
           </div>
           <div className="hidden md:flex gap-6">
             <NavLink end to="/" className={navLinkClass}>
-              Home
+              {t("home")}
             </NavLink>
             <NavLink to="/movies" className={navLinkClass}>
-              Movies
+              {t("movies")}
             </NavLink>
             <NavLink to="/tv-shows" className={navLinkClass}>
-              TV-Shows
+              {t("tvShows")}
             </NavLink>
             <NavLink to="/trending" className={navLinkClass}>
-              Trending
+              {t("trending")}
             </NavLink>
           </div>
           <div className="hidden  md:flex gap-3">
             <ThemeToggle/>
+            <LanguageSwitcher/>
             <Link
               to={`/search`}
               className="flex items-center gap-2 text-gray-400 transition-colors duration-200 hover:text-white"
             >
-              <Search size={20} /> Search
+              <Search size={20} /> {t("search")}
             </Link>
             <Link
               to={`/profile`}
               className="flex items-center gap-2 text-gray-400 transition-colors duration-200 hover:text-white"
             >
-              <User size={20} /> Profile
+              <User size={20} /> {t("profile")}
             </Link>
           </div>
           <button
@@ -88,7 +96,7 @@ const Navbar = () => {
             <Link
               to="/search"
               onClick={closeMenu}
-              className="flex items-center gap-3 text-gray-300 transition-colors hover:text-purple-400"
+              className="flex items-center gap-3 text-gray-400 transition-colors hover:text-white"
             >
               <Search size={20} />
               Search
@@ -96,7 +104,7 @@ const Navbar = () => {
             <Link
               to="/profile"
               onClick={closeMenu}
-              className="flex items-center gap-3 text-gray-300 transition-colors hover:text-purple-400"
+              className="flex items-center gap-3 text-gray-400 transition-colors hover:text-white"
             >
               <User size={20} />
               Profile

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const MovieCard = ({id, title, rating, year, image}) => {
   return (
     <Link to={`/movie/${id}`}>
-    <article className="group overflow-hidden rounded-xl bg-gray-900">
+    <article className="group overflow-hidden rounded-xl bg-card">
       <div className="relative aspect-[2/3] overflow-hidden">
         <img src={image} alt={title} 
         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"/>
@@ -19,8 +19,8 @@ const MovieCard = ({id, title, rating, year, image}) => {
       </div>
 
       <div className="p-4">
-        <h3 className="truncate text-sm font-semibold text-white sm:text-base md:text-lg">{title}</h3>
-        <div className="mt-2 flex items-center justify-between text-sm text-gray-400">
+        <h3 className="truncate text-sm font-semibold text-card-foreground  sm:text-base md:text-lg">{title}</h3>
+        <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Star size={15} className="fill-current text-yellow-400"/>
             {rating?.toFixed(1)}</span>

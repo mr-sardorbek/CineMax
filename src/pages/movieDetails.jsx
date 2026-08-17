@@ -275,38 +275,46 @@ const MovieDetails = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-black text-foreground">
-          Movie Information
-        </h2>
+  <h2 className="mb-6 text-2xl font-bold text-foreground">
+    Movie Information
+  </h2>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl bg-gray-100 p-5">
-            <p className="text-sm text-gray-500">Status</p>
-            <p className="mt-2 font-semibold text-black">{movie.status}</p>
-          </div>
+  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="rounded-xl bg-muted p-5">
+      <p className="text-sm text-muted-foreground">Status</p>
 
-          <div className="rounded-xl bg-gray-100 p-5">
-            <p className="text-sm text-gray-500">Original Language</p>
-            <p className="mt-2 font-semibold uppercase text-black">
-              {movie.original_language}
-            </p>
-          </div>
+      <p className="mt-2 font-semibold text-foreground">
+        {movie.status}
+      </p>
+    </div>
 
-          <div className="rounded-xl bg-gray-100 p-5">
-            <p className="text-sm text-gray-500">Budget</p>
-            <p className="mt-2 font-semibold text-black">
-              ${movie.budget?.toLocaleString()}
-            </p>
-          </div>
+    <div className="rounded-xl bg-muted p-5">
+      <p className="text-sm text-muted-foreground">
+        Original Language
+      </p>
 
-          <div className="rounded-xl bg-gray-100 p-5">
-            <p className="text-sm text-gray-500">Revenue</p>
-            <p className="mt-2 font-semibold text-black">
-              ${movie.revenue?.toLocaleString()}
-            </p>
-          </div>
-        </div>
-      </section>
+      <p className="mt-2 font-semibold uppercase text-foreground">
+        {movie.original_language}
+      </p>
+    </div>
+
+    <div className="rounded-xl bg-muted p-5">
+      <p className="text-sm text-muted-foreground">Budget</p>
+
+      <p className="mt-2 font-semibold text-foreground">
+        ${movie.budget?.toLocaleString()}
+      </p>
+    </div>
+
+    <div className="rounded-xl bg-muted p-5">
+      <p className="text-sm text-muted-foreground">Revenue</p>
+
+      <p className="mt-2 font-semibold text-foreground">
+        ${movie.revenue?.toLocaleString()}
+      </p>
+    </div>
+  </div>
+</section>
     </main>
   );
 };

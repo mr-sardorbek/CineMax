@@ -73,10 +73,10 @@ const Search = () => {
     <main>
       <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10 mt-22">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black">
+          <h1 className="text-3xl font-bold text-foreground">
             Search Movies & TV Shows
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-muted-foreground">
             Find your favorite movies and TV shows
           </p>
         </div>
@@ -86,7 +86,7 @@ const Search = () => {
             type="text"
             value={query}
             placeholder="Search movies and TV shows..."
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-3 outline-none"
+            className="flex-1 rounded-lg border  border-input placeholder:text-muted-foreground px-4 py-3 outline-none bg-background text-foreground"
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
@@ -99,7 +99,7 @@ const Search = () => {
         </div>
 
         <div className="mt-10">
-          <h2 className="mb-6 text-2xl font-bold text-black">Search Results</h2>
+          <h2 className="mb-6 text-2xl font-bold text-muted-foreground">Search Results</h2>
 
           {resultsContent}
         </div>

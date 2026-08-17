@@ -40,7 +40,7 @@ const TVshows = () => {
     <main>
       <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
     <div>
-      <h1 className="mb-6 text-3xl font-bold text-black mt-22">Popular TV Shows</h1>
+      <h1 className="mb-6 text-3xl font-bold text-foreground mt-22">Popular TV Shows</h1>
     </div>
 
     {loading ? (
@@ -70,7 +70,7 @@ const TVshows = () => {
 
     <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
     <div>
-      <h2 className="mb-6 text-3xl font-bold text-black">Top Rated TV Shows</h2>
+      <h2 className="mb-6 text-3xl font-bold text-foreground">Top Rated TV Shows</h2>
     </div>
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
           {topRatedTVShows.map((show) => (
@@ -87,7 +87,7 @@ const TVshows = () => {
 
     <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
     <div>
-      <h2 className="mb-6 text-3xl font-bold text-black">Airing Today</h2>
+      <h2 className="mb-6 text-3xl font-bold text-foreground">Airing Today</h2>
     </div>
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
           {airingToday.map((show) => (
@@ -104,7 +104,7 @@ const TVshows = () => {
 
     <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
     <div>
-      <h2 className="mb-6 text-3xl font-bold text-black">On The Air</h2>
+      <h2 className="mb-6 text-3xl font-bold text-foreground">On The Air</h2>
     </div>
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
           {onTheAir.map((show) => (
