@@ -15,7 +15,6 @@ const Navbar = () => {
 
  const languageData = useLanguage();
 
-console.log("LANGUAGE DATA:", languageData);
 
 const { t } = languageData;
 
@@ -72,34 +71,35 @@ const { t } = languageData;
         {isMenuOpen && (
           <div className="flex flex-col gap-5 rounded-b-2xl bg-black/90 px-4 pb-6 pt-4 backdrop-blur-md md:hidden">
             <NavLink end to="/" className={navLinkClass} onClick={closeMenu}>
-              Home
+              {t("home")}
             </NavLink>
             <NavLink to="/movies" className={navLinkClass} onClick={closeMenu}>
-              Movies
+              {t("movies")}
             </NavLink>
             <NavLink
               to="/tv-shows"
               className={navLinkClass}
               onClick={closeMenu}
             >
-              TV-Shows
+              {t("tvShows")}
             </NavLink>
             <NavLink
               to="/trending"
               className={navLinkClass}
               onClick={closeMenu}
             >
-              Trending
+              {t("trending")}
             </NavLink>
 
             <ThemeToggle/>
+            <LanguageSwitcher />
             <Link
               to="/search"
               onClick={closeMenu}
               className="flex items-center gap-3 text-gray-400 transition-colors hover:text-white"
             >
               <Search size={20} />
-              Search
+             {t("search")}
             </Link>
             <Link
               to="/profile"
@@ -107,7 +107,7 @@ const { t } = languageData;
               className="flex items-center gap-3 text-gray-400 transition-colors hover:text-white"
             >
               <User size={20} />
-              Profile
+              {t("profile")}
             </Link>
           </div>
         )}

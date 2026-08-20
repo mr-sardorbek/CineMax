@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import useLanguage from "@/hooks/useLanguage";
 import {
   getMovieCredits,
   getMovieDetails,
@@ -26,6 +27,8 @@ const MovieDetails = () => {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
 
+  const { t } = useLanguage();
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -37,8 +40,8 @@ const MovieDetails = () => {
         console.log("Movie data", movieDetailsData);
       } catch (error) {
         console.log(error);
-        toast.error("Failed to load movies", {
-          description: "Please check your internet connection and try again!",
+        toast.error(t("errorTitle"), {
+          description: t("errorDescription"),
           className: "border-red-500/30 bg-red-950 text-white",
           position: "top-center",
         });
@@ -69,8 +72,8 @@ const MovieDetails = () => {
         console.log("TRAILER:", trailer);
       } catch (error) {
         console.log(error);
-        toast.error("Failed to load movies", {
-          description: "Please check your internet connection and try again!",
+        toast.error(t("errorTitle"), {
+          description: t("errorDescription"),
           className: "border-red-500/30 bg-red-950 text-white",
           position: "top-center",
         });
@@ -88,8 +91,8 @@ const MovieDetails = () => {
         console.log(movieCredits);
       } catch (error) {
         console.log(error);
-        toast.error("Failed to load movies", {
-          description: "Please check your internet connection and try again!",
+        toast.error(t("errorTitle"), {
+          description: t("errorDescription"),
           className: "border-red-500/30 bg-red-950 text-white",
           position: "top-center",
         });
@@ -106,8 +109,8 @@ const MovieDetails = () => {
         setSimilarMovies(similarMoviesData.results);
       } catch (error) {
         console.log(error);
-        toast.error("Failed to load movies", {
-          description: "Please check your internet connection and try again!",
+        toast.error(t("errorTitle"), {
+          description: t("errorDescription"),
           className: "border-red-500/30 bg-red-950 text-white",
           position: "top-center",
         });
@@ -118,7 +121,7 @@ const MovieDetails = () => {
   }, [id]);
 
   if (!movie) {
-    return <div className="loading">Loading movie details...</div>;
+    return <div className="loading">{t("loadingMovie")}</div>;
   }
 
   return (
@@ -170,7 +173,7 @@ const MovieDetails = () => {
               </div>
 
               <div className="mx-auto mt-8 max-w-3xl md:mx-0">
-                <h2 className="text-2xl font-bold">Overview</h2>
+                <h2 className="text-2xl font-bold"> {t("overview")}</h2>
 
                 <p className="mt-3 leading-7 text-gray-300">{movie.overview}</p>
               </div>
@@ -180,7 +183,7 @@ const MovieDetails = () => {
                   className="cursor-pointer bg-purple-600 px-6 py-5 font-medium text-white hover:bg-purple-700"
                   onClick={() => setIsTrailerOpen(true)}
                 >
-                  Watch Trailer
+                  {t("watchTrailer")}
                 </Button>
               </div>
             </div>
@@ -215,7 +218,7 @@ const MovieDetails = () => {
       )}
 
       <section className="mx-auto max-w-7xl px-5 py-12 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-foreground">Cast</h2>
+        <h2 className="mb-6 text-2xl font-bold text-foreground">{t("cast")}</h2>
 
         <Carousel
           opts={{
@@ -258,7 +261,9 @@ const MovieDetails = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-black text-foreground">Similar Movies</h2>
+        <h2 className="mb-6 text-2xl font-bold text-black text-foreground">
+          {t("similarMovies")}
+        </h2>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
           {similarMovies.slice(0, 10).map((movie) => (
@@ -275,46 +280,42 @@ const MovieDetails = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-  <h2 className="mb-6 text-2xl font-bold text-foreground">
-    Movie Information
-  </h2>
+        <h2 className="mb-6 text-2xl font-bold text-foreground">
+          {t("movieInformation")}
+        </h2>
 
-  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    <div className="rounded-xl bg-muted p-5">
-      <p className="text-sm text-muted-foreground">Status</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl bg-muted p-5">
+            <p className="text-sm text-muted-foreground"><p>{t("status")}</p></p>
 
-      <p className="mt-2 font-semibold text-foreground">
-        {movie.status}
-      </p>
-    </div>
+            <p className="mt-2 font-semibold text-foreground">{movie.status}</p>
+          </div>
 
-    <div className="rounded-xl bg-muted p-5">
-      <p className="text-sm text-muted-foreground">
-        Original Language
-      </p>
+          <div className="rounded-xl bg-muted p-5">
+            <p className="text-sm text-muted-foreground">{t("originalLanguage")}</p>
 
-      <p className="mt-2 font-semibold uppercase text-foreground">
-        {movie.original_language}
-      </p>
-    </div>
+            <p className="mt-2 font-semibold uppercase text-foreground">
+              {movie.original_language}
+            </p>
+          </div>
 
-    <div className="rounded-xl bg-muted p-5">
-      <p className="text-sm text-muted-foreground">Budget</p>
+          <div className="rounded-xl bg-muted p-5">
+            <p className="text-sm text-muted-foreground">{t("budget")}</p>
 
-      <p className="mt-2 font-semibold text-foreground">
-        ${movie.budget?.toLocaleString()}
-      </p>
-    </div>
+            <p className="mt-2 font-semibold text-foreground">
+              ${movie.budget?.toLocaleString()}
+            </p>
+          </div>
 
-    <div className="rounded-xl bg-muted p-5">
-      <p className="text-sm text-muted-foreground">Revenue</p>
+          <div className="rounded-xl bg-muted p-5">
+            <p className="text-sm text-muted-foreground">{t("revenue")}</p>
 
-      <p className="mt-2 font-semibold text-foreground">
-        ${movie.revenue?.toLocaleString()}
-      </p>
-    </div>
-  </div>
-</section>
+            <p className="mt-2 font-semibold text-foreground">
+              ${movie.revenue?.toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

@@ -6,19 +6,31 @@ const LanguageSwitcher = () => {
 
   return (
     <Select
-      value={currentLanguage}
-      onValueChange={changeLanguage}
-    >
-      <SelectTrigger className="w-[100px]">
-        <SelectValue />
-      </SelectTrigger>
+  value={currentLanguage}
+  onValueChange={changeLanguage}
+>
+  <SelectTrigger
+    className="h-9 w-[72px] cursor-pointer border-border bg-background/80 px-2.5
+    text-xs font-semibold uppercase shadow-sm backdrop-blur-sm
+    hover:bg-accent focus:ring-1 focus:ring-purple-500"
+  >
+    <SelectValue />
+  </SelectTrigger>
 
-      <SelectContent >
-        <SelectItem value="uz" >UZ</SelectItem>
-        <SelectItem value="ru">RU</SelectItem>
-        <SelectItem value="en">EN</SelectItem>
-      </SelectContent>
-    </Select>
+  <SelectContent>
+    <SelectItem value="uz" className="cursor-pointer">
+       UZ
+    </SelectItem>
+
+    <SelectItem value="ru" className="cursor-pointer">
+       RU
+    </SelectItem>
+
+    <SelectItem value="en" className="cursor-pointer">
+       EN
+    </SelectItem>
+  </SelectContent>
+</Select>
   );
 };
 
