@@ -17,7 +17,7 @@ import {
 } from "@/services/tmdbAPI";
 import { Star, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const MovieDetails = () => {
@@ -232,7 +232,7 @@ const MovieDetails = () => {
                 key={actor.id}
                 className="basis-1/2 pl-4 sm:basis-1/3 md:basis-1/4 lg:basis-1/6"
               >
-                <div>
+                <Link to={`/person/${actor.id}`} className="group block">
                   <img
                     src={
                       actor.profile_path
@@ -250,7 +250,7 @@ const MovieDetails = () => {
                   <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                     {actor.character}
                   </p>
-                </div>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>

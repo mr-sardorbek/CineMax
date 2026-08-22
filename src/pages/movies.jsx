@@ -1,7 +1,8 @@
-import { MovieCard } from "@/components";
+import { GenreFilter, MovieCard } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLanguage from "@/hooks/useLanguage";
 import {
+  getMoviesByGenre,
   getNowPlayingMovies,
   getPopularMovies,
   getTopRatedMovies,
@@ -16,6 +17,8 @@ const Movies = () => {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [genreMovies, setGenreMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { t } = useLanguage();
@@ -44,6 +47,29 @@ const Movies = () => {
     };
     loadMovies();
   }, []);
+
+
+  useEffect(() => {
+     if (selectedGenre === null) return;
+       const loadMovieGenre = async() => {
+          try {
+            const movieGenreData = await getMoviesByGenre(selectedGenre)
+
+            setGenreMovies(movieGenreData.results)
+            console.log(movieGenreData.results);
+            
+          } catch (error) {
+            toast.error(t("errorTitle"), {
+          description: t("errorDescription"),
+          className: "border-red-500/30 bg-red-950 text-white",
+          position: "top-center",
+        });
+          } finally {
+            setLoading(false)
+          }
+        }
+        loadMovieGenre()
+  },[selectedGenre])
   return (
     <main>
       <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
@@ -52,6 +78,10 @@ const Movies = () => {
             {t("movies")}
           </h1>
         </div>
+
+        <GenreFilter 
+        selectedGenre={selectedGenre}
+        onGenreChange={setSelectedGenre}/>
 
         {loading ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
@@ -65,7 +95,7 @@ const Movies = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5">
-            {popularMovies.map((movie) => (
+            {(selectedGenre !== null ? genreMovies :  popularMovies).map((movie) => (
               <MovieCard
                 key={movie.id}
                 id={movie.id}

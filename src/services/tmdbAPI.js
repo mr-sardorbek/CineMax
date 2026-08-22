@@ -94,6 +94,24 @@ const getSimilarMovies = async (id) => {
     return data
 }
 
+const getMoviesByGenre = async (genreId) => {
+    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`)
+    const data = await response.json()
+    return data
+}
+
+const getPersonDetails = async(personId) => {
+    const response = await fetch(`${BASE_URL}/person/${personId}?api_key=${API_KEY}`)
+    const data = await response.json()
+    return data
+}
+
+const getPersonCredits = async(personId) => {
+    const response = await fetch(`${BASE_URL}/person/${personId}/combined_credits?api_key=${API_KEY}`)
+    const data = await response.json()
+    return data
+}
+
 export  {
     IMAGE_BASE_URL,
     getTrendingMovies,
@@ -110,5 +128,8 @@ export  {
     getMovieDetails,
     getMovieVideos,
     getMovieCredits,
-    getSimilarMovies
+    getSimilarMovies,
+    getMoviesByGenre,
+    getPersonDetails,
+    getPersonCredits
 }
