@@ -1,11 +1,17 @@
 import { Play, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const MovieCard = ({id, title, rating, year, image}) => {
+const MovieCard = ({id, title, rating, year, image, adult}) => {
+  
   return (
     <Link to={`/movie/${id}`}>
     <article className="group overflow-hidden rounded-xl bg-card">
       <div className="relative aspect-[2/3] overflow-hidden">
+      {adult && (
+        <span className="absolute left-3 top-3 z-10 rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">
+          18+
+        </span>
+      )}
         <img src={image} alt={title} 
         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"/>
 

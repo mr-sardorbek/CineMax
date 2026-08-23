@@ -11,6 +11,7 @@ import useLanguage from "@/hooks/useLanguage";
 import {
   getMovieCredits,
   getMovieDetails,
+  getMovieReleaseDates,
   getMovieVideos,
   getSimilarMovies,
   IMAGE_BASE_URL,
@@ -119,6 +120,25 @@ const MovieDetails = () => {
 
     loadSimilarMovies();
   }, [id]);
+
+
+  useEffect(() => {
+  const loadMovie = async () => {
+    try {
+      console.log("MOVIE ID:", id);
+
+      const releaseData = await getMovieReleaseDates(id);
+
+      console.log("RELEASE DATA:", releaseData);
+
+      // qolgan kodlaring
+    } catch (error) {
+      console.error("RELEASE ERROR:", error);
+    }
+  };
+
+  loadMovie();
+}, [id]);
 
   if (!movie) {
     return <div className="loading">{t("loadingMovie")}</div>;

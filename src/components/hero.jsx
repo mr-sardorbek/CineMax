@@ -1,9 +1,11 @@
 import { Info, Play, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import genreMap from "@/constants/genreMap";
+import useLanguage from "@/hooks/useLanguage";
 
 const Hero = ({ movie }) => {
-  console.log("GENRES:", movie?.genre_ids)
+
+  const {t} = useLanguage()
   
   const genres = movie?.genre_ids?.map((id) => genreMap[id]).filter(Boolean)
   return (
@@ -38,12 +40,12 @@ const Hero = ({ movie }) => {
           <div className="mt-7 flex items-center gap-3">
             <Button className={`gap-2 rounded-full px-6 cursor-pointer`}>
               <Play size={18}/>
-              Watch Now
+              {t("watchNow")}
             </Button>
             <Button variant="outline" className={`gap-2 rounded-full border-white/30 bg-white/10 px-6 text-white
               backdrop-blur-sm hover:bg-white/20 cursor-pointer`}>
               <Info size={18}/>
-              More Info
+              {t("moreInfo")}
               </Button>
           </div>
           </div>

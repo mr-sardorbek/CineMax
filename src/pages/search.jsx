@@ -96,7 +96,7 @@ const Search = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <Button
-            className="rounded-lg bg-purple-600 h-auto px-6 py-3 font-medium text-white"
+            className="rounded-lg bg-purple-600 hover:bg-purple-700 cursor-pointer h-auto px-6 py-3 font-medium text-white"
             onClick={handleSearch}
           >
             {t("search")}

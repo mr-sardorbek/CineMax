@@ -1,5 +1,6 @@
 import { Toaster } from "sonner"
 import Navbar from "../components/navbar"
+import { Footer } from "@/components"
 
 
 const MainLayout = ({children}) => {
@@ -12,6 +13,7 @@ const MainLayout = ({children}) => {
     <main >
       {children}
     </main>
+      <Footer/>
     </>
   )
 }

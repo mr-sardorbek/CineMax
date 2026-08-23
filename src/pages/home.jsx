@@ -18,12 +18,11 @@ const Home = () => {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const featuredMovie = topRatedMovies[12];
+  const featuredMovie = movies[3];
 
-  const languageData = useLanguage();
+  const {t} = useLanguage();
 
-  const { t } = languageData;
-
+  
   useEffect(() => {
     const loadMovies = async () => {
       try {

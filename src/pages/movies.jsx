@@ -103,6 +103,7 @@ const Movies = () => {
                 rating={movie.vote_average}
                 year={movie.release_date?.slice(0, 4)}
                 image={`${IMAGE_BASE_URL}${movie.poster_path}`}
+                adult={movie.adult}
               />
             ))}
           </div>
@@ -124,6 +125,7 @@ const Movies = () => {
               rating={movie.vote_average}
               year={movie.release_date?.slice(0, 4)}
               image={`${IMAGE_BASE_URL}${movie.poster_path}`}
+              adult={movie.adult}
             />
           ))}
         </div>
@@ -144,6 +146,7 @@ const Movies = () => {
               rating={movie.vote_average}
               year={movie.release_date?.slice(0, 4)}
               image={`${IMAGE_BASE_URL}${movie.poster_path}`}
+              adult={movie.adult}
             />
           ))}
         </div>
@@ -164,6 +167,7 @@ const Movies = () => {
               rating={movie.vote_average}
               year={movie.release_date?.slice(0, 4)}
               image={`${IMAGE_BASE_URL}${movie.poster_path}`}
+              adult={movie.adult}
             />
           ))}
         </div>
