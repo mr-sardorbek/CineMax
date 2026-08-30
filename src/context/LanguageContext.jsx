@@ -1,4 +1,5 @@
-import translations from "@/constants/translations";
+
+import translations from "@/components/constants/translations";
 import {  createContext, useEffect, useState } from "react";
 
 

@@ -9,7 +9,7 @@ const MainLayout = ({children}) => {
     <nav>
       <Navbar/>
     </nav>
-    <Toaster richColors/>
+    <Toaster position="top-center" richColors/>
     <main >
       {children}
     </main>

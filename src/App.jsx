@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import { Home, MovieDetails, Movies, NotFound, PersonDetails, Profile, Search, Trending, TVshows } from './pages'
+import { Home, Login, MovieDetails, Movies, NotFound, PersonDetails, Profile, Register, Search, Trending, TVshows } from './pages'
 import MainLayout from './layouts/mainLayouts'
+import { ProtectedRoute } from './components'
 
 
 const App = () => {
@@ -10,9 +11,15 @@ const App = () => {
       <Route path='/' element={<Home/>}/>
       <Route path='/movies' element={<Movies/>}/>
       <Route path='/search' element={<Search/>}/>
-      <Route path='/profile' element={<Profile/>}/>
+      <Route path='/profile' element={
+        <ProtectedRoute>
+          <Profile/>
+        </ProtectedRoute>
+      }/>
       <Route path='/tv-shows' element={<TVshows/>}/>
       <Route path='/trending' element={<Trending/>}/>
+      <Route path='/register' element={<Register/>}/>
+      <Route path='/login' element={<Login/>}/>
       <Route path='/movie/:id' element={<MovieDetails/>}/>
       <Route path='/person/:id' element={<PersonDetails/>}/>
       <Route path='*' element={<NotFound/>}/>

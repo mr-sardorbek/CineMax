@@ -1,4 +1,5 @@
-import genres from "@/constants/genres";
+
+import genres from "./constants/genres";
 import { Button } from "./ui/button";
 
 const GenreFilter = ({ selectedGenre, onGenreChange }) => {

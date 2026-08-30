@@ -4,12 +4,15 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import { LanguageProvider } from "./context/LanguageContext";
+import { AuthProvider } from "./context/authContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LanguageProvider>
       <BrowserRouter>
+      <AuthProvider>
         <App />
+      </AuthProvider>
       </BrowserRouter>
     </LanguageProvider>
   </StrictMode>,

@@ -3,7 +3,7 @@ import { Button } from "./ui/button"
 import { Moon, Sun } from "lucide-react"
 
 
-const ThemeToggle = () => {
+const ThemeToggle = ({closeMenu}) => {
     const [isDark, setIsDark] = useState(false)
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const ThemeToggle = () => {
         }
     }
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme}>
+    <Button variant="outline" size="icon" onClick={toggleTheme}  >
         {isDark ? <Sun size={18}/> : <Moon size={18}/>}
     </Button>
   )

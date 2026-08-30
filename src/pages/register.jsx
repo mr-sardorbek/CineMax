@@ -1,0 +1,204 @@
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import useLanguage from "@/hooks/useLanguage";
+
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const {t} = useLanguage()
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error(t("pleaseFillAllFields"));
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error(t("passwordMinLength"));
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error(t("passwordsDoNotMatch"));
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success(data.message);
+
+      navigate("/login");
+
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      toast.error(t("somethingWentWrong"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <Card className="w-full max-w-md shadow-lg mt-24">
+        <CardHeader className="space-y-3 text-center">
+          <CardTitle className="text-3xl font-bold tracking-tight">
+           {t("createAccount")}
+          </CardTitle>
+
+          <CardDescription>
+            {t("createAccountToContinue")}
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name */}
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                {t("name")}
+              </label>
+
+              <Input
+                id="name"
+                type="text"
+                placeholder={t("enterYourName")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="transition-all duration-200 focus-visible:ring-purple-500"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+               {t("email")}
+              </label>
+
+              <Input
+                id="email"
+                type="email"
+                placeholder={t("enterYourEmail")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="transition-all duration-200 focus-visible:ring-purple-500"
+              />
+            </div>
+
+            
+            <div className="space-y-2 relative">
+              <label htmlFor="password" className="text-sm font-medium">
+                {t("password")}
+              </label>
+
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder={t("enterYourPassword")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="transition-all duration-200 focus-visible:ring-purple-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-9 -translate-y-1/2 text-purple-600"
+              >
+                {showPassword ? <EyeOff/> : <Eye/>}
+              </button>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="space-y-2 relative">
+              <label htmlFor="confirmPassword" className="text-sm font-medium">
+                {t("confirmPassword")}
+              </label>
+
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder={t("confirmYourPassword")}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="transition-all duration-200 focus-visible:ring-purple-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-9 -translate-y-1/2 text-purple-600 transition-colors duration-300 
+                hover:text-purple-700 cursor-pointer"
+              >
+                {showConfirmPassword ? <EyeOff/> : <Eye/>}
+              </button>
+            </div>
+
+            {/* Button */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full cursor-pointer bg-purple-600 text-white transition-all duration-300 hover:bg-purple-700"
+            >
+              {loading ? t("creatingAccount") : t("createAccount")}
+            </Button>
+
+            {/* Login */}
+            <p className="text-center text-sm text-muted-foreground">
+              {t("alreadyHaveAccount")}{" "}
+              <Link
+                to={`/login`}
+                className="font-medium  hover:underline text-foreground hover:text-purple-700 transition-all duration-300 cursor-pointer"
+              >
+                {t("login")}
+              </Link>
+            </p>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Register;

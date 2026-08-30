@@ -1,7 +1,8 @@
 import { Info, Play, Star } from "lucide-react";
 import { Button } from "./ui/button";
-import genreMap from "@/constants/genreMap";
+
 import useLanguage from "@/hooks/useLanguage";
+import genreMap from "./constants/genreMap";
 
 const Hero = ({ movie }) => {
 

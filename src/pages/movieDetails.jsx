@@ -89,7 +89,7 @@ const MovieDetails = () => {
         const movieCredits = await getMovieCredits(id);
 
         setCredits(movieCredits);
-        console.log(movieCredits);
+        
       } catch (error) {
         console.log(error);
         toast.error(t("errorTitle"), {
@@ -125,7 +125,7 @@ const MovieDetails = () => {
   useEffect(() => {
   const loadMovie = async () => {
     try {
-      console.log("MOVIE ID:", id);
+      
 
       const releaseData = await getMovieReleaseDates(id);
 
@@ -306,7 +306,7 @@ const MovieDetails = () => {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl bg-muted p-5">
-            <p className="text-sm text-muted-foreground"><p>{t("status")}</p></p>
+            <p className="text-sm text-muted-foreground">{t("status")}</p>
 
             <p className="mt-2 font-semibold text-foreground">{movie.status}</p>
           </div>

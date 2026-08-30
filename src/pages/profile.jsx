@@ -1,11 +1,100 @@
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Mail } from "lucide-react";
+import useLanguage from "@/hooks/useLanguage";
 
 
 const Profile = () => {
-  return (
-    <div>
-      <h1>Profile</h1>
-    </div>
-  )
-}
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-export default Profile
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await fetch("http://localhost:5000/profile", {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.log("PROFILE ERROR:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getProfile();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <p className="text-muted-foreground">{t("loadingProfile")}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <Card className="mt-20 w-full max-w-md shadow-lg">
+        <CardHeader className="items-center space-y-4 text-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-purple-600 text-3xl font-bold text-white">
+            {user?.name?.charAt(0).toUpperCase()}
+          </div>
+
+          <div>
+            <CardTitle className="text-3xl font-bold">
+              {t("profile")}
+            </CardTitle>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("profileDescription")}
+            </p>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-4 rounded-lg border p-4 transition-colors duration-300 hover:border-purple-500">
+            <User className="h-5 w-5 text-purple-600" />
+
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {t("name")}
+              </p>
+
+              <p className="font-medium">
+                {user?.name}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 rounded-lg border p-4 transition-colors duration-300 hover:border-purple-500">
+            <Mail className="h-5 w-5 text-purple-600" />
+
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {t("email")}
+              </p>
+
+              <p className="font-medium break-all">
+                {user?.email}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Profile;
