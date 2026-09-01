@@ -30,7 +30,6 @@ const PersonDetails = () => {
       const data = await getPersonDetails(id);
       const creditsData = await getPersonCredits(id);
 
-      console.log("Person", creditsData.cast);
       setPerson(data);
       setCredits(creditsData.cast);
     };

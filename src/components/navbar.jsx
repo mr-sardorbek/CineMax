@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 const navLinkClass = ({ isActive }) =>
   isActive
     ? "text-purple-500 transition-colors duration-200"
-    : "text-foreground transition-colors duration-200 hover:text-purple-500";
+    : "text-white transition-colors duration-200 hover:text-purple-500";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,7 +55,7 @@ const Navbar = () => {
             <LanguageSwitcher />
             <Link
               to={`/search`}
-              className="flex items-center gap-2 text-foreground transition-colors duration-200 hover:text-purple-500"
+              className="flex items-center gap-2 text-white transition-colors duration-200 hover:text-purple-500"
             >
               <Search size={20} /> {t("search")}
             </Link>
@@ -64,7 +64,7 @@ const Navbar = () => {
               <div className="flex items-center gap-3">
               <Link
                 to="/profile"
-                className="flex items-center gap-2 text-foreground transition-colors duration-200 hover:text-purple-500"
+                className="flex items-center gap-2 text-white transition-colors duration-200 hover:text-purple-500"
               >
                 <User size={20} />
                 {t("profile")}
@@ -133,7 +133,7 @@ const Navbar = () => {
             <Link
               to="/search"
               onClick={closeMenu}
-              className="flex items-center gap-3 text-gray-400 transition-colors hover:text-white"
+              className="flex items-center gap-3 text-white transition-colors hover:text-purple-500"
             >
               <Search size={20} />
               {t("search")}
@@ -143,7 +143,7 @@ const Navbar = () => {
                 <Link
                 to="/profile"
                 onClick={closeMenu}
-                className="flex items-center gap-3 text-gray-400 transition-colors hover:text-purple-500"
+                className="flex items-center mb-3 gap-3 text-white transition-colors hover:text-purple-500"
               >
                 <User size={20} />
                 {t("profile")}

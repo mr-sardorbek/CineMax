@@ -1,29 +1,33 @@
 import { MovieCard } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLanguage from "@/hooks/useLanguage";
+import { setLoading, setMovies, setTrendingTVShows } from "@/redux/moviesSlice";
 import {
   getTrendingMovies,
   getTrendingTVShows,
   IMAGE_BASE_URL,
 } from "@/services/tmdbAPI";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const Trending = () => {
-  const [trendingMovies, setTrendingMovies] = useState([]);
-  const [trendingTVShows, setTrendingTVShows] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const trendingMovies = useSelector((state) => state.movies.movies)
+  const trendingTVShows = useSelector((state) => state.movies.trendingTVShows)
+  const loading = useSelector((state) => state.movies.loading);
 
   const { t } = useLanguage();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loadTrending = async () => {
+      dispatch(setLoading(true));
       try {
         const trendingMoviesData = await getTrendingMovies();
         const trendingTVShowsData = await getTrendingTVShows();
 
-        setTrendingMovies(trendingMoviesData.results);
-        setTrendingTVShows(trendingTVShowsData.results);
+        dispatch(setMovies(trendingMoviesData.results));
+        dispatch(setTrendingTVShows(trendingTVShowsData.results));
       } catch (error) {
         toast.error(t("errorTitle"), {
           description: t("errorDescription"),
@@ -31,7 +35,7 @@ const Trending = () => {
           position: "top-center",
         });
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
     loadTrending();

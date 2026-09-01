@@ -23,7 +23,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const {t} = useLanguage()
-
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -108,7 +107,7 @@ const Register = () => {
                 placeholder={t("enterYourName")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="transition-all duration-200 focus-visible:ring-purple-500"
+                className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
             </div>
 
@@ -124,7 +123,7 @@ const Register = () => {
                 placeholder={t("enterYourEmail")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="transition-all duration-200 focus-visible:ring-purple-500"
+                className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
             </div>
 
@@ -140,12 +139,12 @@ const Register = () => {
                 placeholder={t("enterYourPassword")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="transition-all duration-200 focus-visible:ring-purple-500"
+                className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 -translate-y-1/2 text-purple-600"
+                className="absolute right-3 top-10 -translate-y-1/2 text-purple-600"
               >
                 {showPassword ? <EyeOff/> : <Eye/>}
               </button>
@@ -163,12 +162,12 @@ const Register = () => {
                 placeholder={t("confirmYourPassword")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="transition-all duration-200 focus-visible:ring-purple-500"
+                className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-9 -translate-y-1/2 text-purple-600 transition-colors duration-300 
+                className="absolute right-3 top-10 -translate-y-1/2 text-purple-600 transition-colors duration-300 
                 hover:text-purple-700 cursor-pointer"
               >
                 {showConfirmPassword ? <EyeOff/> : <Eye/>}

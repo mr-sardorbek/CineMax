@@ -1,50 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MovieCard from "../components/movieCard";
 import {
-  getPopularMovies,
-  getTopRatedMovies,
-  getTrendingMovies,
   IMAGE_BASE_URL,
 } from "../services/tmdbAPI";
 import { Hero } from "../components";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 import useLanguage from "@/hooks/useLanguage";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPopularMovies,
+  fetchTopRatedMovies,
+  fetchTrendingMovies,
+} from "@/redux/moviesSlice";
 
 const Home = () => {
-  const [movies, setMovies] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const movies = useSelector((state) => state.movies.movies);
+  const popularMovies = useSelector((state) => state.movies.popularMovies);
+  const topRatedMovies = useSelector((state) => state.movies.topRatedMovies);
+  const loading = useSelector((state) => state.movies.loading.trending);
 
   const featuredMovie = movies[3];
 
-  const {t} = useLanguage();
+  const { t } = useLanguage();
+  const dispatch = useDispatch();
 
-  
   useEffect(() => {
-    const loadMovies = async () => {
-      try {
-        const data = await getTrendingMovies();
-        const popularData = await getPopularMovies();
-        const topRatedData = await getTopRatedMovies();
+          dispatch(fetchTrendingMovies());
+          dispatch(fetchPopularMovies())
+          dispatch(fetchTopRatedMovies())
 
-        setMovies(data.results);
-        setPopularMovies(popularData.results);
-        setTopRatedMovies(topRatedData.results);
-      } catch (error) {
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadMovies();
   }, []);
 
   return (

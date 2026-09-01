@@ -1,40 +1,44 @@
 import { MovieCard } from "@/components"
 import { Skeleton } from "@/components/ui/skeleton"
 import useLanguage from "@/hooks/useLanguage"
+import { setAiringToday, setLoading, setOnTheAir, setPopularTVsHows, setTopRatedShows } from "@/redux/moviesSlice"
 import { getAiringToday, getOnTheAir, getPopularTVShows, getTopRatedTVShows, IMAGE_BASE_URL } from "@/services/tmdbAPI"
-import { useEffect, useState } from "react"
+import { useEffect} from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { toast } from "sonner"
 
 
 const TVshows = () => {
-  const [popularTVShows, setPopularTVShows] = useState([])
-  const [topRatedTVShows, setTopRatedTVShows] = useState([])
-  const [airingToday, setAiringToday] = useState([])
-  const [onTheAir, setOnTheAir] = useState([])
-  const [loading, setLoading] = useState(true)
+  const popularTVShows = useSelector((state) => state.movies.popularTVShows)
+  const topRatedTVShows = useSelector((state) => state.movies.topRatedTVShows)
+  const airingToday = useSelector((state) => state.movies.airingToday)
+  const onTheAir = useSelector((state) => state.movies.onTheAir)
+  const loading = useSelector((state) => state.movies.loading);
 
   const {t} = useLanguage()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loadTVShows = async () => {
+      dispatch(setLoading(true));
       try {
         const popularTVShowsData = await getPopularTVShows()
         const topRatedTVShowsData = await getTopRatedTVShows()
         const airingTodayData = await getAiringToday()
         const onTheAirData = await getOnTheAir()
 
-        setPopularTVShows(popularTVShowsData.results)
-        setTopRatedTVShows(topRatedTVShowsData.results)
-        setAiringToday(airingTodayData.results)
-        setOnTheAir(onTheAirData.results)
+        dispatch(setPopularTVsHows(popularTVShowsData.results))
+        dispatch(setTopRatedShows(topRatedTVShowsData.results))
+        dispatch(setAiringToday(airingTodayData.results))
+        dispatch(setOnTheAir(onTheAirData.results))
       } catch (error) {
        toast.error(t("errorTitle"), {
   description: t("errorDescription"),
   className: "border-red-500/30 bg-red-950 text-white",
   position: "top-center",
-});А
+});
       } finally {
-        setLoading(false)
+        dispatch(setLoading(false))
       }
     }
     loadTVShows()

@@ -1,78 +1,42 @@
 import { GenreFilter, MovieCard } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLanguage from "@/hooks/useLanguage";
+import { fetchMoviesByGenre, fetchNowPlayingMovies, fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies,} from "@/redux/moviesSlice";
 import {
-  getMoviesByGenre,
-  getNowPlayingMovies,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
   IMAGE_BASE_URL,
 } from "@/services/tmdbAPI";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Movies = () => {
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
-  const [genreMovies, setGenreMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  
+  const popularMovies = useSelector((state) => state.movies.popularMovies)
+  const topRatedMovies = useSelector((state) => state.movies.topRatedMovies)
+  const nowPlayingMovies = useSelector((state) => state.movies.nowPlayingMovies)
+  const upcomingMovies = useSelector((state) => state.movies.upcomingMovies)
+  const genreMovies = useSelector((state) => state.movies.genreMovies)
+  const loading = useSelector((state) => state.movies.loading.popular);
 
   const { t } = useLanguage();
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    const loadMovies = async () => {
-      try {
-        const popularMoviesData = await getPopularMovies();
-        const topRatedMoviesData = await getTopRatedMovies();
-        const nowPlayingMoviesData = await getNowPlayingMovies();
-        const upcomingMoviesData = await getUpcomingMovies();
-
-        setPopularMovies(popularMoviesData.results);
-        setTopRatedMovies(topRatedMoviesData.results);
-        setNowPlayingMovies(nowPlayingMoviesData.results);
-        setUpcomingMovies(upcomingMoviesData.results);
-      } catch (error) {
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadMovies();
+        dispatch(fetchPopularMovies())
+        dispatch(fetchTopRatedMovies())
+        dispatch(fetchNowPlayingMovies())
+        dispatch(fetchUpcomingMovies())
   }, []);
 
 
   useEffect(() => {
      if (selectedGenre === null) return;
-       const loadMovieGenre = async() => {
-          try {
-            const movieGenreData = await getMoviesByGenre(selectedGenre)
-
-            setGenreMovies(movieGenreData.results)
-            console.log(movieGenreData.results);
-            
-          } catch (error) {
-            toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-          } finally {
-            setLoading(false)
-          }
-        }
-        loadMovieGenre()
-  },[selectedGenre])
+       dispatch(fetchMoviesByGenre(selectedGenre))
+  },[selectedGenre, dispatch])
   return (
     <main>
-      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
+      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10 ">
         <div>
           <h1 className="mb-6 text-3xl font-bold text-foreground mt-22">
             {t("movies")}

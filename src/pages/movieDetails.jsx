@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import useLanguage from "@/hooks/useLanguage";
+import { setIsTrailerOpen, setSimilarMovies } from "@/redux/moviesSlice";
 import {
   getMovieCredits,
   getMovieDetails,
@@ -18,6 +19,7 @@ import {
 } from "@/services/tmdbAPI";
 import { Star, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -25,11 +27,13 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [trailer, setTrailer] = useState(null);
   const [credits, setCredits] = useState(null);
-  const [similarMovies, setSimilarMovies] = useState([]);
-  const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+  
+
+  const similarMovies = useSelector((state) => state.movies.similarMovies)
+  const isTrailerOpen= useSelector((state) => state.movies.isTrailerOpen)
 
   const { t } = useLanguage();
-
+  const dispatch = useDispatch()
   const { id } = useParams();
 
   useEffect(() => {
@@ -70,7 +74,6 @@ const MovieDetails = () => {
           );
 
         setTrailer(trailer || null);
-        console.log("TRAILER:", trailer);
       } catch (error) {
         console.log(error);
         toast.error(t("errorTitle"), {
@@ -107,7 +110,7 @@ const MovieDetails = () => {
       try {
         const similarMoviesData = await getSimilarMovies(id);
 
-        setSimilarMovies(similarMoviesData.results);
+        dispatch(setSimilarMovies(similarMoviesData.results));
       } catch (error) {
         console.log(error);
         toast.error(t("errorTitle"), {
@@ -131,7 +134,7 @@ const MovieDetails = () => {
 
       console.log("RELEASE DATA:", releaseData);
 
-      // qolgan kodlaring
+      
     } catch (error) {
       console.error("RELEASE ERROR:", error);
     }
@@ -201,7 +204,7 @@ const MovieDetails = () => {
               <div className="mt-8 flex justify-center md:justify-start">
                 <Button
                   className="cursor-pointer bg-purple-600 px-6 py-5 font-medium text-white hover:bg-purple-700"
-                  onClick={() => setIsTrailerOpen(true)}
+                  onClick={() => dispatch(setIsTrailerOpen(true))}
                 >
                   {t("watchTrailer")}
                 </Button>
@@ -227,7 +230,7 @@ const MovieDetails = () => {
             <Button
               className="absolute -right-3 -top-9 flex h-8 w-8 items-center justify-center rounded-full text-xl
              cursor-pointer text-black hover:bg-gray-200 bg-white"
-              onClick={() => setIsTrailerOpen(false)}
+              onClick={() => dispatch(setIsTrailerOpen(false))}
               variant="ghost"
               size="icon"
             >

@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Mail } from "lucide-react";
 import useLanguage from "@/hooks/useLanguage";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/moviesSlice";
 
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const loading = useSelector((state) => state.movies.loading);
+  
+  const dispatch = useDispatch()
   const { t } = useLanguage();
 
   useEffect(() => {
     const getProfile = async () => {
+        dispatch(setLoading(true))
       const token = localStorage.getItem("token");
 
       try {
@@ -29,7 +33,7 @@ const Profile = () => {
       } catch (error) {
         console.log("PROFILE ERROR:", error);
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
@@ -46,14 +50,14 @@ const Profile = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
-      <Card className="mt-20 w-full max-w-md shadow-lg">
+      <Card className="mt-16 w-full max-w-md shadow-lg sm:mt-20">
         <CardHeader className="items-center space-y-4 text-center">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-purple-600 text-3xl font-bold text-white">
             {user?.name?.charAt(0).toUpperCase()}
           </div>
 
           <div>
-            <CardTitle className="text-3xl font-bold">
+            <CardTitle className="text-2xl font-bold sm:text-3xl">
               {t("profile")}
             </CardTitle>
 
