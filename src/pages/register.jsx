@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,9 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Eye, EyeOff } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+
 import useLanguage from "@/hooks/useLanguage";
+import { registerUser } from "@/redux/authSlice";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -20,10 +24,12 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const {t} = useLanguage()
-  const navigate = useNavigate()
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const loading = useSelector((state) => state.auth.loading);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,49 +49,34 @@ const Register = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
-      const response = await fetch("http://localhost:5000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const result = await dispatch(
+        registerUser({
           name,
           email,
           password,
         }),
-      });
+      ).unwrap();
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data.message);
-        return;
-      }
-
-      toast.success(data.message);
-
-      navigate("/login");
+      toast.success(result.message);
 
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      navigate("/login");
     } catch (error) {
-      toast.error(t("somethingWentWrong"));
-    } finally {
-      setLoading(false);
+      toast.error(error.message || t("somethingWentWrong"));
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
-      <Card className="w-full max-w-md shadow-lg mt-24">
+      <Card className="mt-24 w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
           <CardTitle className="text-3xl font-bold tracking-tight">
-           {t("createAccount")}
+            {t("createAccount")}
           </CardTitle>
 
           <CardDescription>
@@ -97,7 +88,10 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium"
+              >
                 {t("name")}
               </label>
 
@@ -113,8 +107,11 @@ const Register = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-               {t("email")}
+              <label
+                htmlFor="email"
+                className="text-sm font-medium"
+              >
+                {t("email")}
               </label>
 
               <Input
@@ -127,9 +124,12 @@ const Register = () => {
               />
             </div>
 
-            
-            <div className="space-y-2 relative">
-              <label htmlFor="password" className="text-sm font-medium">
+            {/* Password */}
+            <div className="relative space-y-2">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium"
+              >
                 {t("password")}
               </label>
 
@@ -141,18 +141,22 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-10 -translate-y-1/2 text-purple-600"
+                className="absolute right-3 top-10 -translate-y-1/2 cursor-pointer text-purple-600 transition-colors duration-300 hover:text-purple-700"
               >
-                {showPassword ? <EyeOff/> : <Eye/>}
+                {showPassword ? <EyeOff /> : <Eye />}
               </button>
             </div>
 
             {/* Confirm Password */}
-            <div className="space-y-2 relative">
-              <label htmlFor="confirmPassword" className="text-sm font-medium">
+            <div className="relative space-y-2">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-medium"
+              >
                 {t("confirmPassword")}
               </label>
 
@@ -164,31 +168,35 @@ const Register = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="h-11 pr-11 text-sm transition-all duration-200 focus-visible:ring-purple-500 sm:h-10 sm:text-base"
               />
+
               <button
                 type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-10 -translate-y-1/2 text-purple-600 transition-colors duration-300 
-                hover:text-purple-700 cursor-pointer"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+                className="absolute right-3 top-10 -translate-y-1/2 cursor-pointer text-purple-600 transition-colors duration-300 hover:text-purple-700"
               >
-                {showConfirmPassword ? <EyeOff/> : <Eye/>}
+                {showConfirmPassword ? <EyeOff /> : <Eye />}
               </button>
             </div>
 
-            {/* Button */}
+            {/* Register Button */}
             <Button
               type="submit"
               disabled={loading}
               className="w-full cursor-pointer bg-purple-600 text-white transition-all duration-300 hover:bg-purple-700"
             >
-              {loading ? t("creatingAccount") : t("createAccount")}
+              {loading
+                ? t("creatingAccount")
+                : t("createAccount")}
             </Button>
 
             {/* Login */}
             <p className="text-center text-sm text-muted-foreground">
               {t("alreadyHaveAccount")}{" "}
               <Link
-                to={`/login`}
-                className="font-medium  hover:underline text-foreground hover:text-purple-700 transition-all duration-300 cursor-pointer"
+                to="/login"
+                className="cursor-pointer font-medium text-foreground transition-all duration-300 hover:text-purple-700 hover:underline"
               >
                 {t("login")}
               </Link>

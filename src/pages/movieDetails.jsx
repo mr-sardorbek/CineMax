@@ -8,143 +8,47 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import useLanguage from "@/hooks/useLanguage";
-import { setIsTrailerOpen, setSimilarMovies } from "@/redux/moviesSlice";
 import {
-  getMovieCredits,
-  getMovieDetails,
-  getMovieReleaseDates,
-  getMovieVideos,
-  getSimilarMovies,
-  IMAGE_BASE_URL,
-} from "@/services/tmdbAPI";
+  fetchMovieCredits,
+  fetchMovieDetails,
+  fetchMovieVideos,
+  fetchSimilarMovies,
+  setIsTrailerOpen,
+} from "@/redux/moviesSlice";
+import { IMAGE_BASE_URL } from "@/services/tmdbAPI";
 import { Star, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { toast } from "sonner";
 
 const MovieDetails = () => {
-  const [movie, setMovie] = useState(null);
-  const [trailer, setTrailer] = useState(null);
-  const [credits, setCredits] = useState(null);
-  
-
-  const similarMovies = useSelector((state) => state.movies.similarMovies)
-  const isTrailerOpen= useSelector((state) => state.movies.isTrailerOpen)
+  const credits = useSelector((state) => state.movies.credits);
+  const trailer = useSelector((state) => state.movies.trailer);
+  const movie = useSelector((state) => state.movies.movieDetails);
+  const similarMovies = useSelector(
+    (state) => state.movies.similarMovies,
+  );
+  const isTrailerOpen = useSelector(
+    (state) => state.movies.isTrailerOpen,
+  );
 
   const { t } = useLanguage();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { id } = useParams();
 
   useEffect(() => {
-    const loadMovie = async () => {
-      try {
-        const movieDetailsData = await getMovieDetails(id);
-
-        setMovie(movieDetailsData);
-        console.log("Movie data", movieDetailsData);
-      } catch (error) {
-        console.log(error);
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      }
-    };
-    loadMovie();
-  }, [id]);
-
-  useEffect(() => {
-    const trailerMovie = async () => {
-      try {
-        const trailerData = await getMovieVideos(id);
-
-        const officialTrailer = trailerData.results.find(
-          (video) =>
-            video.site === "YouTube" &&
-            video.type === "Trailer" &&
-            video.official === true,
-        );
-
-        const trailer =
-          officialTrailer ||
-          trailerData.results.find(
-            (video) => video.site === "YouTube" && video.type === "Trailer",
-          );
-
-        setTrailer(trailer || null);
-      } catch (error) {
-        console.log(error);
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      }
-    };
-    trailerMovie();
-  }, [id]);
-
-  useEffect(() => {
-    const loadCredits = async () => {
-      try {
-        const movieCredits = await getMovieCredits(id);
-
-        setCredits(movieCredits);
-        
-      } catch (error) {
-        console.log(error);
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      }
-    };
-    loadCredits();
-  }, [id]);
-
-  useEffect(() => {
-    const loadSimilarMovies = async () => {
-      try {
-        const similarMoviesData = await getSimilarMovies(id);
-
-        dispatch(setSimilarMovies(similarMoviesData.results));
-      } catch (error) {
-        console.log(error);
-        toast.error(t("errorTitle"), {
-          description: t("errorDescription"),
-          className: "border-red-500/30 bg-red-950 text-white",
-          position: "top-center",
-        });
-      }
-    };
-
-    loadSimilarMovies();
-  }, [id]);
-
-
-  useEffect(() => {
-  const loadMovie = async () => {
-    try {
-      
-
-      const releaseData = await getMovieReleaseDates(id);
-
-      console.log("RELEASE DATA:", releaseData);
-
-      
-    } catch (error) {
-      console.error("RELEASE ERROR:", error);
-    }
-  };
-
-  loadMovie();
-}, [id]);
+    dispatch(fetchMovieDetails(id));
+    dispatch(fetchMovieVideos(id));
+    dispatch(fetchMovieCredits(id));
+    dispatch(fetchSimilarMovies(id));
+  }, [id, dispatch]);
 
   if (!movie) {
-    return <div className="loading">{t("loadingMovie")}</div>;
+    return (
+      <div className="loading">
+        {t("loadingMovie")}
+      </div>
+    );
   }
 
   return (
@@ -158,7 +62,7 @@ const MovieDetails = () => {
           />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-5 pt-[190px] pb-12 sm:pt-[220px] md:-mt-64 md:px-8 md:pt-[380px] md:pb-16">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 pb-12 pt-[190px] sm:pt-[220px] md:-mt-64 md:px-8 md:pb-16 md:pt-[380px]">
           <div className="flex flex-col items-center gap-8 md:flex-row md:items-end md:gap-8">
             <div className="w-44 shrink-0 sm:w-52 md:w-64">
               <img
@@ -175,7 +79,10 @@ const MovieDetails = () => {
 
               <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-300 md:justify-start md:gap-4">
                 <span className="flex items-center gap-1">
-                  <Star size={14} className="fill-current text-yellow-400" />
+                  <Star
+                    size={14}
+                    className="fill-current text-yellow-400"
+                  />
                   {movie.vote_average?.toFixed(1)}
                 </span>
 
@@ -185,7 +92,7 @@ const MovieDetails = () => {
               </div>
 
               <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
-                {movie.genres.map((genre) => (
+                {movie.genres?.map((genre) => (
                   <span
                     key={genre.id}
                     className="rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-600"
@@ -196,15 +103,21 @@ const MovieDetails = () => {
               </div>
 
               <div className="mx-auto mt-8 max-w-3xl md:mx-0">
-                <h2 className="text-2xl font-bold"> {t("overview")}</h2>
+                <h2 className="text-2xl font-bold">
+                  {t("overview")}
+                </h2>
 
-                <p className="mt-3 leading-7 text-gray-300">{movie.overview}</p>
+                <p className="mt-3 leading-7 text-gray-300">
+                  {movie.overview}
+                </p>
               </div>
 
               <div className="mt-8 flex justify-center md:justify-start">
                 <Button
                   className="cursor-pointer bg-purple-600 px-6 py-5 font-medium text-white hover:bg-purple-700"
-                  onClick={() => dispatch(setIsTrailerOpen(true))}
+                  onClick={() =>
+                    dispatch(setIsTrailerOpen(true))
+                  }
                 >
                   {t("watchTrailer")}
                 </Button>
@@ -228,9 +141,10 @@ const MovieDetails = () => {
             </div>
 
             <Button
-              className="absolute -right-3 -top-9 flex h-8 w-8 items-center justify-center rounded-full text-xl
-             cursor-pointer text-black hover:bg-gray-200 bg-white"
-              onClick={() => dispatch(setIsTrailerOpen(false))}
+              className="absolute -right-3 -top-9 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white text-xl text-black hover:bg-gray-200"
+              onClick={() =>
+                dispatch(setIsTrailerOpen(false))
+              }
               variant="ghost"
               size="icon"
             >
@@ -241,7 +155,9 @@ const MovieDetails = () => {
       )}
 
       <section className="mx-auto max-w-7xl px-5 py-12 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-foreground">{t("cast")}</h2>
+        <h2 className="mb-6 text-2xl font-bold text-foreground">
+          {t("cast")}
+        </h2>
 
         <Carousel
           opts={{
@@ -255,7 +171,10 @@ const MovieDetails = () => {
                 key={actor.id}
                 className="basis-1/2 pl-4 sm:basis-1/3 md:basis-1/4 lg:basis-1/6"
               >
-                <Link to={`/person/${actor.id}`} className="group block">
+                <Link
+                  to={`/person/${actor.id}`}
+                  className="group block"
+                >
                   <img
                     src={
                       actor.profile_path
@@ -284,7 +203,7 @@ const MovieDetails = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-        <h2 className="mb-6 text-2xl font-bold text-black text-foreground">
+        <h2 className="mb-6 text-2xl font-bold text-foreground">
           {t("similarMovies")}
         </h2>
 
@@ -309,13 +228,19 @@ const MovieDetails = () => {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl bg-muted p-5">
-            <p className="text-sm text-muted-foreground">{t("status")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("status")}
+            </p>
 
-            <p className="mt-2 font-semibold text-foreground">{movie.status}</p>
+            <p className="mt-2 font-semibold text-foreground">
+              {movie.status}
+            </p>
           </div>
 
           <div className="rounded-xl bg-muted p-5">
-            <p className="text-sm text-muted-foreground">{t("originalLanguage")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("originalLanguage")}
+            </p>
 
             <p className="mt-2 font-semibold uppercase text-foreground">
               {movie.original_language}
@@ -323,7 +248,9 @@ const MovieDetails = () => {
           </div>
 
           <div className="rounded-xl bg-muted p-5">
-            <p className="text-sm text-muted-foreground">{t("budget")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("budget")}
+            </p>
 
             <p className="mt-2 font-semibold text-foreground">
               ${movie.budget?.toLocaleString()}
@@ -331,7 +258,9 @@ const MovieDetails = () => {
           </div>
 
           <div className="rounded-xl bg-muted p-5">
-            <p className="text-sm text-muted-foreground">{t("revenue")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("revenue")}
+            </p>
 
             <p className="mt-2 font-semibold text-foreground">
               ${movie.revenue?.toLocaleString()}

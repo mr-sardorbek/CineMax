@@ -1,49 +1,32 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { User, Mail } from "lucide-react";
 import useLanguage from "@/hooks/useLanguage";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/moviesSlice";
-
+import { fetchProfile } from "@/redux/authSlice";
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const loading = useSelector((state) => state.movies.loading);
-  
-  const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.user);
+  const loading = useSelector((state) => state.auth.loading);
+
+  const dispatch = useDispatch();
   const { t } = useLanguage();
 
   useEffect(() => {
-    const getProfile = async () => {
-        dispatch(setLoading(true))
-      const token = localStorage.getItem("token");
-
-      try {
-        const response = await fetch("http://localhost:5000/profile", {
-          headers: {
-            Authorization: token,
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setUser(data.user);
-        }
-      } catch (error) {
-        console.log("PROFILE ERROR:", error);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-    getProfile();
-  }, []);
+    dispatch(fetchProfile());
+  }, [dispatch]);
 
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <p className="text-muted-foreground">{t("loadingProfile")}</p>
+        <p className="text-muted-foreground">
+          {t("loadingProfile")}
+        </p>
       </div>
     );
   }
@@ -90,7 +73,7 @@ const Profile = () => {
                 {t("email")}
               </p>
 
-              <p className="font-medium break-all">
+              <p className="break-all font-medium">
                 {user?.email}
               </p>
             </div>

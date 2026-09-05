@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 
 const PersonDetails = () => {
   const { id } = useParams();
+
   const [person, setPerson] = useState(null);
   const [credits, setCredits] = useState([]);
   const [visibleCount, setVisibleCount] = useState(15);
@@ -37,44 +38,70 @@ const PersonDetails = () => {
     loadPerson();
   }, [id]);
 
+  const biography = person?.biography || "";
+
   return (
-    <main className="mx-auto max-w-7xl px-5 py-24 md:px-8 mt-8">
+    <main className="mx-auto mt-8 max-w-7xl px-5 py-24 md:px-8">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
-        <img className="w-48 shrink-0 rounded-2xl object-cover shadow-xl md:w-64"
+        <img
+          className="w-48 shrink-0 rounded-2xl object-cover shadow-xl md:w-64"
           src={
             person?.profile_path
               ? `${IMAGE_BASE_URL}${person.profile_path}`
               : "/placeholder-person.png"
           }
-          alt={person?.name}
+          alt={person?.name || "Person"}
         />
+
         <div>
-          <h1 className="text-3xl font-bold text-foreground">{person?.name}</h1>
-          <p className="mt-2 text-purple-400"> {t("knownForDepartment")}: {person?.known_for_department}</p>
-          <p className="mt-4 text-muted-foreground">{showFullBio ?  person?.biography : person?.biography.slice(0,300)} {" "}
-          {person?.biography?.length > 300 && (
-            <button onClick={() => setShowFullBio((prev) => !prev)}
-             className="mt-2 text-sm text-purple-400 hover:text-purple-300">
-              {showFullBio ? t("showLess") : t("readMore")}
-            </button>
-          )}
+          <h1 className="text-3xl font-bold text-foreground">
+            {person?.name}
+          </h1>
+
+          <p className="mt-2 text-purple-400">
+            {t("knownForDepartment")}:{" "}
+            {person?.known_for_department}
           </p>
+
+          <p className="mt-4 text-muted-foreground">
+            {showFullBio
+              ? biography
+              : biography.slice(0, 300)}{" "}
+
+            {biography.length > 300 && (
+              <button
+                onClick={() => setShowFullBio((prev) => !prev)}
+                className="mt-2 text-sm text-purple-400 hover:text-purple-300"
+              >
+                {showFullBio
+                  ? t("showLess")
+                  : t("readMore")}
+              </button>
+            )}
+          </p>
+
           <div className="mt-5 space-y-2">
             <p className="text-sm text-muted-foreground">
               {t("birthday")}:{" "}
-              <span className="text-foreground">{person?.birthday}</span>
+              <span className="text-foreground">
+                {person?.birthday}
+              </span>
             </p>
 
             <p className="text-sm text-muted-foreground">
               {t("placeOfBirth")}:{" "}
-              <span className="text-foreground">{person?.place_of_birth}</span>
+              <span className="text-foreground">
+                {person?.place_of_birth}
+              </span>
             </p>
           </div>
         </div>
       </div>
 
       <div className="mt-10">
-        <h2 className="text-2xl font-bold text-foreground">{t("knownFor")}</h2>
+        <h2 className="text-2xl font-bold text-foreground">
+          {t("knownFor")}
+        </h2>
 
         <div className="mt-5">
           <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
@@ -97,15 +124,14 @@ const PersonDetails = () => {
             ))}
           </div>
 
-          <div className="flex justify-center mt-8">
+          <div className="mt-8 flex justify-center">
             {visibleCount <
               credits.filter((item) => item.poster_path).length && (
               <Button
-                className="rounded-full bg-purple-600 px-7 py-3 font-medium text-white
-              transition-all duration-200 hover:bg-purple-700 hover:shadow-lg hover:shadow-500/20 
-              disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
+                className="cursor-pointer rounded-full bg-purple-600 px-7 py-3 font-medium text-white transition-all duration-200 hover:bg-purple-700 hover:shadow-lg hover:shadow-500/20 disabled:cursor-not-allowed disabled:opacity-70"
                 onClick={() => {
                   setIsLoadingMore(true);
+
                   setTimeout(() => {
                     setVisibleCount((prev) => prev + 15);
                     setIsLoadingMore(false);
@@ -114,9 +140,10 @@ const PersonDetails = () => {
                 disabled={isLoadingMore}
               >
                 {isLoadingMore ? (
-                  <>
-                    <Loader size={18} className="animate-spin" />
-                  </>
+                  <Loader
+                    size={18}
+                    className="animate-spin"
+                  />
                 ) : (
                   "Load More"
                 )}

@@ -1,24 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/context/authContext";
 import useLanguage from "@/hooks/useLanguage";
+import { loginUser } from "@/redux/authSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.auth.loading);
 
   const { t } = useLanguage();
-
-  const {setIsLoggedIn} = useAuth()
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,39 +27,24 @@ const Login = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const result = await dispatch(
+        loginUser({
           email,
           password,
         }),
-      });
+      ).unwrap();
 
-      const data = await response.json();
+      localStorage.setItem("token", result.token);
 
-      if (!response.ok) {
-        toast.error(data.message);
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
-       setIsLoggedIn(true)
       toast.success(t("loginSuccessful"));
 
       setEmail("");
       setPassword("");
-      
-      navigate("/")
+
+      navigate("/");
     } catch (error) {
-      toast.error(t("somethingWentWrong"));
-    } finally {
-      setLoading(false);
+      toast.error(error.message || t("somethingWentWrong"));
     }
   };
 

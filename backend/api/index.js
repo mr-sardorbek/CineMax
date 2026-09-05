@@ -7,28 +7,28 @@ import { MongoClient, ObjectId } from "mongodb";
 
 dotenv.config();
 
-const client = new MongoClient(process.env.MONGO_URI);
-
-let db;
-let users;
-
-const connectDB = async () => {
-  if (db && users) return;
-
-  await client.connect();
-
-  db = client.db("movieApp");
-  users = db.collection("users");
-
-  console.log("MongoDB connected");
-};
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+const client = new MongoClient(process.env.MONGO_URI);
+
+let db;
+
+const connectDB = async () => {
+  if (db) return db;
+
+  await client.connect();
+
+  db = client.db("movieApp");
+
+  console.log("MongoDB connected");
+
+  return db;
+};
+
+app.get("/", async (req, res) => {
   res.json({
     message: "Movie App API is working",
   });
@@ -36,8 +36,6 @@ app.get("/", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    await connectDB();
-
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -45,6 +43,9 @@ app.post("/register", async (req, res) => {
         message: "All fields are required.",
       });
     }
+
+    const database = await connectDB();
+    const users = database.collection("users");
 
     const existingUser = await users.findOne({ email });
 
@@ -76,9 +77,10 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    await connectDB();
-
     const { email, password } = req.body;
+
+    const database = await connectDB();
+    const users = database.collection("users");
 
     const user = await users.findOne({ email });
 
@@ -122,8 +124,6 @@ app.post("/login", async (req, res) => {
 
 const authMiddleware = async (req, res, next) => {
   try {
-    await connectDB();
-
     const token = req.headers.authorization;
 
     if (!token) {
@@ -136,6 +136,9 @@ const authMiddleware = async (req, res, next) => {
       token,
       process.env.JWT_SECRET,
     );
+
+    const database = await connectDB();
+    const users = database.collection("users");
 
     const user = await users.findOne(
       {

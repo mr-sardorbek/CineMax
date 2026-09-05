@@ -4,8 +4,9 @@ import { Menu, Search, User, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageSwitcher, ThemeToggle } from ".";
 import useLanguage from "@/hooks/useLanguage";
-import { useAuth } from "@/context/authContext";
 import { Button } from "./ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "@/redux/authSlice";
 
 const navLinkClass = ({ isActive }) =>
   isActive
@@ -15,70 +16,83 @@ const navLinkClass = ({ isActive }) =>
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const languageData = useLanguage();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
- const { isLoggedIn, setIsLoggedIn } = useAuth();
-
- const navigate = useNavigate()
-
-  const { t } = languageData;
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logoutUser());
+    setIsMenuOpen(false);
+    navigate("/");
+  };
+
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full bg-transparent  backdrop-blur-sm">
+    <nav className="fixed left-0 top-0 z-50 w-full bg-transparent backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex items-center justify-between py-0">
           <div>
             <Link to="/">
-              <img src={MovieLogo} alt="Movie logo" className="w-32" />
+              <img
+                src={MovieLogo}
+                alt="Movie logo"
+                className="w-32"
+              />
             </Link>
           </div>
-          <div className="hidden md:flex gap-6">
+
+          <div className="hidden gap-6 md:flex">
             <NavLink end to="/" className={navLinkClass}>
               {t("home")}
             </NavLink>
+
             <NavLink to="/movies" className={navLinkClass}>
               {t("movies")}
             </NavLink>
+
             <NavLink to="/tv-shows" className={navLinkClass}>
               {t("tvShows")}
             </NavLink>
+
             <NavLink to="/trending" className={navLinkClass}>
               {t("trending")}
             </NavLink>
           </div>
-          <div className="hidden  md:flex gap-3">
+
+          <div className="hidden gap-3 md:flex">
             <ThemeToggle />
             <LanguageSwitcher />
+
             <Link
-              to={`/search`}
+              to="/search"
               className="flex items-center gap-2 text-white transition-colors duration-200 hover:text-purple-500"
             >
-              <Search size={20} /> {t("search")}
+              <Search size={20} />
+              {t("search")}
             </Link>
 
             {isLoggedIn ? (
               <div className="flex items-center gap-3">
-              <Link
-                to="/profile"
-                className="flex items-center gap-2 text-white transition-colors duration-200 hover:text-purple-500"
-              >
-                <User size={20} />
-                {t("profile")}
-                
-              </Link>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-white transition-colors duration-200 hover:text-purple-500"
+                >
+                  <User size={20} />
+                  {t("profile")}
+                </Link>
 
-              <Button onClick={() => {
-                localStorage.removeItem("token")
-                setIsLoggedIn(false)
-                navigate("/")
-              }}
-              className="cursor-pointer text-white bg-red-800 transition-colors duration-300 hover:bg-red-900">
-                {t("logout")}
-              </Button>
+                <Button
+                  onClick={handleLogout}
+                  className="cursor-pointer bg-red-800 text-white transition-colors duration-300 hover:bg-red-900"
+                >
+                  {t("logout")}
+                </Button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -98,6 +112,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
+
           <button
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -105,14 +120,26 @@ const Navbar = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
         {isMenuOpen && (
           <div className="flex flex-col gap-5 rounded-b-2xl bg-black/90 px-4 pb-6 pt-4 backdrop-blur-md md:hidden">
-            <NavLink end to="/" className={navLinkClass} onClick={closeMenu}>
+            <NavLink
+              end
+              to="/"
+              className={navLinkClass}
+              onClick={closeMenu}
+            >
               {t("home")}
             </NavLink>
-            <NavLink to="/movies" className={navLinkClass} onClick={closeMenu}>
+
+            <NavLink
+              to="/movies"
+              className={navLinkClass}
+              onClick={closeMenu}
+            >
               {t("movies")}
             </NavLink>
+
             <NavLink
               to="/tv-shows"
               className={navLinkClass}
@@ -120,6 +147,7 @@ const Navbar = () => {
             >
               {t("tvShows")}
             </NavLink>
+
             <NavLink
               to="/trending"
               className={navLinkClass}
@@ -130,6 +158,7 @@ const Navbar = () => {
 
             <ThemeToggle />
             <LanguageSwitcher />
+
             <Link
               to="/search"
               onClick={closeMenu}
@@ -138,25 +167,24 @@ const Navbar = () => {
               <Search size={20} />
               {t("search")}
             </Link>
-            {isLoggedIn ? (
-              <div  >
-                <Link
-                to="/profile"
-                onClick={closeMenu}
-                className="flex items-center mb-3 gap-3 text-white transition-colors hover:text-purple-500"
-              >
-                <User size={20} />
-                {t("profile")}
-              </Link>
 
-              <Button onClick={() => {
-                localStorage.removeItem("token")
-                setIsLoggedIn(false)
-                navigate("/")
-              }}
-              className="cursor-pointer text-white bg-red-800 transition-colors duration-300 hover:bg-red-900">
-                {t("logout")}
-              </Button>
+            {isLoggedIn ? (
+              <div>
+                <Link
+                  to="/profile"
+                  onClick={closeMenu}
+                  className="mb-3 flex items-center gap-3 text-white transition-colors hover:text-purple-500"
+                >
+                  <User size={20} />
+                  {t("profile")}
+                </Link>
+
+                <Button
+                  onClick={handleLogout}
+                  className="cursor-pointer bg-red-800 text-white transition-colors duration-300 hover:bg-red-900"
+                >
+                  {t("logout")}
+                </Button>
               </div>
             ) : (
               <div className="flex flex-col gap-3">
