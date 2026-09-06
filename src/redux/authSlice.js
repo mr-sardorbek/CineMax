@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchProfile = createAsyncThunk("auth/fetchProfile", async () => {
   const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:5000/profile", {
+  const response = await fetch("https://cine-max-h348.vercel.app/profile", {
     headers: {
       Authorization: token,
     },
@@ -19,7 +19,7 @@ export const fetchProfile = createAsyncThunk("auth/fetchProfile", async () => {
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async ({ name, email, password }) => {
-    const response = await fetch("http://localhost:5000/register", {
+    const response = await fetch("https://cine-max-h348.vercel.app/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }) => {
-    const response = await fetch("http://localhost:5000/login", {
+    const response = await fetch("https://cine-max-h348.vercel.app/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
