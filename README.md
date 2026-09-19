@@ -1,18 +1,106 @@
-# React + Vite
+CINEMAX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CINEMAX is a modern movie and TV show web application built with React.
+Users can discover movies and TV shows, search for content, view
+details, watch trailers, explore cast members, and manage their
+accounts.
 
-Currently, two official plugins are available:
+Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Frontend: https://cine-max-mocha.vercel.app/
 
-## React Compiler
+Backend API: https://cine-max-h348.vercel.app/
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Features
 
-Note: This will impact Vite dev & build performances.
+Trending movies and TV shows
 
-## Expanding the ESLint configuration
+Popular and top-rated movies and TV shows
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Now Playing and Upcoming movies
+
+Airing Today and On The Air TV shows
+
+Movie and TV show search
+
+Genre-based browsing
+
+Movie details and trailers
+
+Cast, crew, person details, and filmography
+
+Similar movies
+
+User registration and login
+
+JWT authentication
+
+Protected profile page
+
+Responsive design
+
+Dark/light theme
+
+Multi-language interface
+
+Loading skeletons
+
+Toast notifications
+
+404 page
+
+Mobile navigation
+
+Tech Stack
+
+Frontend
+
+React
+
+Vite
+
+JavaScript
+
+React Router
+
+Redux Toolkit
+
+Tailwind CSS
+
+shadcn/ui
+
+Lucide React
+
+Backend
+
+Node.js
+
+Express.js
+
+MongoDB
+
+MongoDB Atlas
+
+bcrypt
+
+JSON Web Token (JWT)
+
+CORS
+
+dotenv
+
+API & Deployment
+
+TMDB API
+
+Vercel
+
+
+
+
+Author
+
+Sardorbek
+Frontend Developer
+
+GitHub: https://github.com/mr-sardorbek

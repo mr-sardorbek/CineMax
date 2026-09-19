@@ -55,7 +55,7 @@ const Home = () => {
   }, [dispatch]);
 
 
-const featuredMovie = movies[3];
+const featuredMovie = movies[9];
 
   return (
     <main>
